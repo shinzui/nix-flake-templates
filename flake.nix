@@ -11,6 +11,10 @@
         path = ./haskell-9_4;
         description = "A template for haskell development with GHC 9.4";
       };
+      haskell-hub = {
+        path = ./haskell-hub;
+        description = "A template for haskell development in random open source projects";
+      };
     };
   };
 }
