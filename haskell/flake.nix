@@ -4,25 +4,29 @@
   inputs.nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
   inputs.pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
   inputs.flake-utils.url = "github:numtide/flake-utils";
+  inputs.treefmt-nix.url = "github:numtide/treefmt-nix";
 
-  outputs = { self, nixpkgs, pre-commit-hooks, flake-utils }:
+
+  outputs = { self, nixpkgs, pre-commit-hooks, flake-utils, treefmt-nix }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs { inherit system; };
         ghcVersion = "ghc965";
         frameworks = pkgs.darwin.apple_sdk.frameworks;
+        treefmtEval = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
+        formatter = treefmtEval.config.build.wrapper;
+
         # haskellPackages = pkgs.haskell.packages."${ghcVersion}";
       in
       {
         checks = {
+          formatting = treefmtEval.config.build.check self;
           pre-commit-check = pre-commit-hooks.lib.${system}.run {
             src = ./.;
             hooks = {
-              nixpkgs-fmt.enable = true;
-              fourmolu.enable = true;
-            };
-            settings = {
-              ormolu.defaultExtensions = [ "ImportQualifiedPost" "TypeApplications" ];
+              treefmt.package = formatter;
+              treefmt.enable = true;
+
             };
           };
         };
