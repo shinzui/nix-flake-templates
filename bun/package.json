@@ -1,0 +1,19 @@
+{
+  "name": "template",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "lint": "oxlint",
+    "format": "biome check --write ."
+  },
+  "author": "Nadeem Bitar",
+  "description": "",
+  "devDependencies": {
+    "@biomejs/biome": "latest",
+    "@types/bun": "latest",
+    "oxlint": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
