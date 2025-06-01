@@ -19,6 +19,10 @@
         path = ./haskell-hub;
         description = "A template for haskell development in random open source projects";
       };
+      node = {
+        path = ./nodejs;
+        description = "A template for nodejs development";
+      };
     };
   };
 }
