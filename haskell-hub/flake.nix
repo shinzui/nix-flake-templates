@@ -11,7 +11,7 @@
         frameworks = pkgs.darwin.apple_sdk.frameworks;
       in
       {
-        devShell = nixpkgs.legacyPackages.${system}.mkShell {
+        devShells.default = nixpkgs.legacyPackages.${system}.mkShell {
           buildInputs = [
             frameworks.Cocoa
           ];

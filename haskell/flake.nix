@@ -27,7 +27,7 @@
             };
           };
         };
-        devShell = nixpkgs.legacyPackages.${system}.mkShell {
+        devShells.default = nixpkgs.legacyPackages.${system}.mkShell {
           inherit (self.checks.${system}.pre-commit-check) shellHook;
           nativeBuildInputs = [
             pkgs.zlib

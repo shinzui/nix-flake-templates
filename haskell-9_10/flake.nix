@@ -15,8 +15,6 @@
         frameworks = pkgs.darwin.apple_sdk.frameworks;
         treefmtEval = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
         formatter = treefmtEval.config.build.wrapper;
-
-        # haskellPackages = pkgs.haskell.packages."${ghcVersion}";
       in
       {
         checks = {
@@ -30,7 +28,7 @@
             };
           };
         };
-        devShell = nixpkgs.legacyPackages.${system}.mkShell {
+        devShells.default = pkgs.mkShell {
           inherit (self.checks.${system}.pre-commit-check) shellHook;
           buildInputs = [
             frameworks.Cocoa
