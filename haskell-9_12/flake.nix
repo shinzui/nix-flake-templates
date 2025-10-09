@@ -12,12 +12,11 @@
       let
         pkgs = import nixpkgs { inherit system; };
         ghcVersion = "ghc912";
-        treefmtEval = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
+        treefmtEval = treefmt-nix.lib.evalModule pkgs (import ./treefmt.nix { inherit pkgs ghcVersion; });
         formatter = treefmtEval.config.build.wrapper;
-
-        # haskellPackages = pkgs.haskell.packages."${ghcVersion}";
       in
       {
+        formatter = formatter;
         checks = {
           formatting = treefmtEval.config.build.check self;
           pre-commit-check = pre-commit-hooks.lib.${system}.run {
@@ -30,7 +29,6 @@
           };
         };
         devShells.default = nixpkgs.legacyPackages.${system}.mkShell {
-          inherit (self.checks.${system}.pre-commit-check) shellHook;
           nativeBuildInputs = [
             pkgs.zlib
             pkgs.xz
@@ -38,7 +36,12 @@
             pkgs.cabal-install
             pkgs.haskell.packages."${ghcVersion}".haskell-language-server
             pkgs.haskell.compiler."${ghcVersion}"
+            pkgs.postgresql
+            pkgs.pkg-config
           ];
+          shellHook = ''
+            ${self.checks.${system}.pre-commit-check.shellHook}
+          '';
         };
       }
     );
