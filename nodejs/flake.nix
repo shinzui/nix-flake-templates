@@ -28,9 +28,8 @@
         devShells.default = pkgs.mkShell {
           inherit (self.checks.${system}.pre-commit-check) shellHook;
           buildInputs = with pkgs; [
-            nodejs_22
+            nodejs
             pnpm
-            (nodePackages.pnpm.override { nodejs = nodejs_22; })
           ];
         };
       });
